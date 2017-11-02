@@ -2,6 +2,7 @@ package imdbfx.view
 
 import imdbfx.app.ImdbController
 import imdbfx.model.Movie
+import imdbfx.model.MovieModel
 import javafx.beans.property.IntegerProperty
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleStringProperty
@@ -58,12 +59,15 @@ class DatagridView : View() {
         setPrefSize(550.0, 550.0)
         cellWidth=300.0
         cellHeight=300.0
-        cellCache {
-            imageview(it.thumbnail, lazyload = true)
-        }
+        cellFragment<MovieCellFragment>()
     }
 }
 
 class MovieCellFragment : DataGridCellFragment<Movie>(){
-    override val root = stackpane { label(item.title)}
+    val movie = MovieModel().bindTo(this)
+    override val root = vbox {
+        imageview(movie.thumbnail, true)
+        label(movie.title)
+    }
+
 }

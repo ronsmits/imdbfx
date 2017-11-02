@@ -5,7 +5,7 @@ import tornadofx.*
 class ImdbController: Controller() {
     val api : Rest by inject()
     init {
-        api.baseURI = "http://theimdbapi.org/api/find/"
+        api.baseURI = "http://theimdbapi.org/api/find"
     }
     fun getMovie(title: String, year : Int) {
         val params = mutableMapOf("title" to title)

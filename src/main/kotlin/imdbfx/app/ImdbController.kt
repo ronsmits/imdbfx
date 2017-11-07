@@ -14,8 +14,18 @@ class ImdbController: Controller() {
         println(params.queryString)
         println(api.getURI("movie${params.queryString}"))
         val resp : Rest.Response? = try {api.get("movie${params.queryString}")} catch (ex: RestException) { null}
+        println(resp?.one())
         val list = resp?.list()?.toModel()?: emptyList<Movie>()
         println(list)
+        return list
+    }
+
+    fun getActor(name: String): List<Movie> {
+        val params = mutableMapOf("name" to name)
+        println("URI: ${api.getURI("person${params.queryString}")}")
+        val resp : Rest.Response? = try {api.get("person${params.queryString}")} catch (ex: RestException) { null}
+        val list = resp?.list()?.toModel()?: emptyList<Movie>()
+        println("list is set to $list")
         return list
     }
 }

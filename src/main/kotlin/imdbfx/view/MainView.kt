@@ -1,6 +1,8 @@
 package imdbfx.view
 
 import imdbfx.app.ImdbController
+import imdbfx.model.Base
+import imdbfx.model.BaseModel
 import imdbfx.model.Movie
 import imdbfx.model.MovieModel
 import javafx.beans.property.IntegerProperty
@@ -40,7 +42,10 @@ class SearchView : View() {
                     isDefaultButton = true
                     action {
                         runAsyncWithProgress {
-                            imdb.getMovie(moviename.value, year.value.toInt())
+                            if(moviename.isNotBlank().value)
+                                imdb.getMovie(moviename.value, year.value.toInt())
+                            else
+                                imdb.getActor(actorname.value)
                         } ui {
                             println("it is set to $it")
                             list.setAll(it)
@@ -55,7 +60,7 @@ class SearchView : View() {
 
 
 class DatagridView : View() {
-    override val root = datagrid<Movie>(list) {
+    override val root = datagrid<Base>(list) {
         setPrefSize(550.0, 550.0)
         cellWidth=300.0
         cellHeight=300.0
@@ -63,9 +68,10 @@ class DatagridView : View() {
     }
 }
 
-class MovieCellFragment : DataGridCellFragment<Movie>(){
-    val movie = MovieModel().bindTo(this)
+class MovieCellFragment : DataGridCellFragment<Base>(){
+    val movie = BaseModel().bindTo(this)
     override val root = vbox {
+        println(movie.thumbnail)
         imageview(movie.thumbnail, true)
         label(movie.title)
     }

@@ -8,7 +8,20 @@ import tornadofx.getValue
 import tornadofx.setValue
 import java.net.URL
 
-class Movie : JsonModel {
+interface Base : JsonModel {
+    fun title() : SimpleStringProperty
+    fun thumbnail() : SimpleStringProperty
+}
+
+class BaseModel : ItemViewModel<Base>() {
+    val title = bind(Base::title)
+    val thumbnail = bind(Base::thumbnail)
+}
+
+class Movie : Base {
+    override fun title() = titleProperty
+
+    override fun thumbnail() = thumbnailProperty
 
     val titleProperty = SimpleStringProperty()
     var title by titleProperty
@@ -19,7 +32,7 @@ class Movie : JsonModel {
     override fun updateModel(json: JsonObject) {
         with (json){
             title = string("title")
-           val imageholder = getJsonObject("poster")?: getJsonObject("image")
+           val imageholder = getJsonObject("poster")
             println(imageholder)
             thumbnail = imageholder.getString("thumb")
             if(thumbnail.isBlank()) thumbnail="https://dummyimage.com/200"

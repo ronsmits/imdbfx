@@ -1,5 +1,6 @@
 package imdbfx.app
 
+import imdbfx.model.Actor
 import imdbfx.model.Movie
 import tornadofx.*
 
@@ -20,11 +21,11 @@ class ImdbController: Controller() {
         return list
     }
 
-    fun getActor(name: String): List<Movie> {
+    fun getActor(name: String): List<Actor> {
         val params = mutableMapOf("name" to name)
         println("URI: ${api.getURI("person${params.queryString}")}")
         val resp : Rest.Response? = try {api.get("person${params.queryString}")} catch (ex: RestException) { null}
-        val list = resp?.list()?.toModel()?: emptyList<Movie>()
+        val list = resp?.list()?.toModel()?: emptyList<Actor>()
         println("list is set to $list")
         return list
     }

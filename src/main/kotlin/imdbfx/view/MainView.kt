@@ -4,12 +4,9 @@ import imdbfx.app.ImdbController
 import imdbfx.model.Base
 import imdbfx.model.BaseModel
 import imdbfx.model.Movie
-import imdbfx.model.MovieModel
-import javafx.beans.property.IntegerProperty
 import javafx.beans.property.SimpleIntegerProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
-import javafx.util.StringConverter
 import tornadofx.*
 
 class MainView : View("Hello TornadoFX") {
@@ -19,7 +16,7 @@ class MainView : View("Hello TornadoFX") {
     }
 }
 
-val list = FXCollections.observableArrayList<Movie>()
+val list = FXCollections.observableArrayList<Base>()
 class SearchView : View() {
 
     val imdb: ImdbController by inject()
@@ -64,16 +61,16 @@ class DatagridView : View() {
         setPrefSize(550.0, 550.0)
         cellWidth=300.0
         cellHeight=300.0
-        cellFragment<MovieCellFragment>()
+        cellFragment<BaseCellFragment>()
     }
 }
 
-class MovieCellFragment : DataGridCellFragment<Base>(){
-    val movie = BaseModel().bindTo(this)
+class BaseCellFragment : DataGridCellFragment<Base>(){
+    val basemodel = BaseModel().bindTo(this)
     override val root = vbox {
-        println(movie.thumbnail)
-        imageview(movie.thumbnail, true)
-        label(movie.title)
+        println(basemodel.thumbnail)
+        imageview(basemodel.thumbnail, false)
+        label(basemodel.title)
     }
 
 }

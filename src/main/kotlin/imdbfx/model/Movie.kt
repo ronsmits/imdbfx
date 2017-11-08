@@ -42,12 +42,24 @@ class Movie : Base {
     override fun toString(): String {
         return "Movie(titleProperty=$titleProperty, thumbnailProperty=$thumbnailProperty)"
     }
-
-
 }
 
-class MovieModel : ItemViewModel<Movie>() {
-    val title = bind(Movie::titleProperty)
-    val thumbnail = bind(Movie::thumbnailProperty)
-}
+class Actor : Base {
+    override fun title() = nameProperty
+    override fun thumbnail() = thumbnailProperty
 
+    val nameProperty = SimpleStringProperty()
+    var name by nameProperty
+    val thumbnailProperty = SimpleStringProperty()
+    var thumbnail by thumbnailProperty
+
+    override fun updateModel(json: JsonObject) {
+        with(json){
+            name = string("title")
+            val imageholder = getJsonObject("image")
+            thumbnail = imageholder.string("thumb")
+            if(thumbnail.isBlank()) thumbnail="https://dummyimage.com/200"
+        }
+    }
+
+}
